@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+</head>
+
+<body>
+    <input type="search" id="msg">
+    <button id="btn">搜索</button>
+    <br> 页数
+    <br>
+    <input type="text" value="1" id="page">
+    <br> 显示图片
+    <br> 标题：
+    <div id="content">
+        <!-- <p id="oriTitle"></p>
+        <img src="" alt="" id="img"> -->
+    </div>
+
+    <script>
+        // 获取到input的内容id
+        var mas = document.querySelector('#msg')
+            // 获取到btn按钮
+        var btn = document.querySelector('#btn')
+            // 获取到页数page的id
+        var page = document.querySelector('#page')
+
+
+        // 定义全局缓存对象
+        var cacheobj = {};
+
+        // 2,将搜索的结果保存到缓存的对象中
+        // function rendersuggestList(res) {
+        //     // 将搜索的结果添加到缓存中
+        //     console.log(res)
+        //     var k = $('#msg').val().trim()
+        //     cacheobj[k] = res
+
+        // }
+
+
+
+        // 防抖
+        // 1，声明一个防抖变量
+        var timer = null;
+        // 2，定义防抖函数
+        function deboanceSearch(mas, page) {
+            // 设置定一个定时器
+            timer = setTimeout(function() {
+
+                getsuggsetList(mas, page) //当没有点击了，才执行调用接口
+
+            }, 500)
+        }
+
+
+        $('#msg').on('keyup', function() {
+            clearTimeout(timer) //每次点击按钮就清除定时器
+            console.log(11111)
+            if (cacheobj[mas]) {
+                return rendersuggestList(cacheobj[mas])
+                console.log(cacheobj[mas])
+            }
+            deboanceSearch(mas, page) //调用防抖
+        })
+
+        // btn.addEventListener('click', function() {
+        //     clearTimeout(timer) //每次点击按钮就清除定时器
+        //         // deboanceSearch(mas, page) //在调用防抖函数从新执行
+
+        //     deboanceSearch(mas, page) //调用防抖
+
+
+        // })
+
+
+
+        function getsuggsetList(mas, page) {
+
+            if (mas.value === '') {
+                alert('请输入搜索内容')
+            } else {
+                $('#content').children().remove() //先删除掉之前的数据
+                $.ajax({
+                    type: "GET",
+                    url: "https://zj.v.api.aa1.cn/api/so-baidu-img/",
+                    data: {
+                        msg: mas.value,
+                        page: page.value
+                    },
+                    success: function(res) {
+                        console.log(res.data) //获取到的是data数组格式
+                            // var arr = JSON.stringify(res.data) //使用stringify 可以转成字符串格式
+                        console.log(res.data[0].oriTitle)
+                            // 使用模板字符串渲染到页面
+                        var k = $('#msg').val().trim() //键
+                        cacheobj[k] = res
+                        console.log(cacheobj)
+                            // for (var i = 0; i < res.data.length; i++) {
+                            //     console.log(i) // 1，for循环数组
+                            //     var bq = `<p id="oriTitle">${res.data[i].oriTitle}</p><img src="${res.data[i].hoverUrl}" alt="" id="img">`
+                            //         // 3，插入标签
+                            //     $('#content').append(bq)
+
+                        // }
+
+
+
+
+
+                    }
+                })
+
+            }
+        }
+
+
+
+
+
+
+
+        // 给btn绑定监听事件click
+        // 键盘点击回车函数事件 keyboard键盘
+
+        var flag = true; //定义一个开关变量，给光标使用的变量
+        function keyboard(flag) {
+            console.log(flag)
+            if (flag) {
+                document.addEventListener('keydown', function(event) {
+                    // console.log(event) //监听键盘事件
+                    if (event.keyCode == 13) {
+                        console.log('点击了回车')
+                            // 点击回车后的事件
+                        $('#btn').click() //调用点击事件
+
+                    }
+                })
+
+            } else {
+                console.log(333)
+            }
+
+        }
+
+
+        // 当光标键入到input的  时候，则才可以敲击回车
+        mas.addEventListener('focus', fn)
+
+        function fn() {
+            console.log(111)
+            keyboard(flag)
+        }
+        mas.addEventListener('blur', function() { //使用focus当光标定位到input的时候，则触发以下事件
+            console.log(222)
+            mas.removeEventListener('focus', fn)
+            flag = false
+                // 当光标移开input的时候给他加个开关
+            keyboard(flag)
+
+
+
+        })
+    </script>
+</body>
+
+</html>

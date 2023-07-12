@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <!-- 文件选择框 -->
+    <input type="file" id="file1">
+    <button id="btnUpload">上传文件</button>
+    <br />
+    <img src="" alt="" id="img" width="800" />
+    <script>
+        // 1、获取
+        var btnUpload = document.querySelector('#btnUpload')
+        console.log(btnUpload)
+            //2、 为按钮绑定点击事件，处理函数
+        btnUpload.addEventListener('click', function() {
+            // 3、获取到用户选择文件的列表
+            //  files
+            var files = document.querySelector('#file1').files
+            if (files.length <= 0) {
+                return alert('请选择要上传的文件')
+            }
+            console.log('用户选择了待上传的文件')
+                // 4、创建一个formData 对象、
+            var fd = new FormData();
+            // 5、向FormData 追加文件 avatar代表头像的意思
+            fd.append('avatar', files[0])
+                // 使用xhr发起请求
+            var xhr = new XMLHttpRequest()
+
+            xhr.open('POST', 'http://api.cvwl.top/Api4Jue.php')
+            xhr.send(fd)
+                // 监听onreadystatechange事件
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    var data = JSON.parse(xhr.responseText)
+                    if (data.status === 200) {
+                        // 上传成功
+                        console.log('aaa')
+                    } else {
+                        // 上传失败
+                        console.log(data.message)
+                    }
+
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
