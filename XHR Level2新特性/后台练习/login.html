@@ -8,13 +8,25 @@
     <link rel="stylesheet" href="/XHR Level2新特性/后台练习/css/login.css">
     <!-- 导入layui库 -->
     <link rel="stylesheet" href="/XHR Level2新特性/后台练习/lib/layui/css/layui.css">
+    <!-- 使用script方法解决跨域 -->
+    <!-- <script src="http://43.163.217.189:373/v1/Login?callback=handleResponse"></script> -->
+    <script>
+        //2、手动生成script标签
+        // function handleResponse(response) {
+        //     console.log('The responsed data is: ' + response.data);
+        // }
+        //处理获得的Json数据
+    </script>
+    <!-- <script src="http://43.163.217.189:373/v1/Login?callback=handleResponse"></script> -->
+
+
 </head>
 
 <body class="layui-main">
     <div class="box-form">
         <!-- title 标题 -->
         <div class="title-box">
-            <h1>个人管理中心后台</h1>
+            <h1 id="h1">个人管理中心后台</h1>
         </div>
         <!-- 登录 login-->
         <div class="login-box">
@@ -43,12 +55,13 @@
                                     <div class="layui-input-prefix">
                                         <i class="layui-icon layui-icon-vercode"></i>
                                     </div>
-                                    <input type="text" name="captcha" value="" lay-verify="required" placeholder="验证码" lay-reqtext="请填写验证码" autocomplete="off" class="layui-input" lay-affix="clear">
+                                    <input type="text" name="captcha" value="" lay-verify="required" placeholder="验证码" lay-reqtext="请填写验证码" autocomplete="off" class="layui-input input-val" lay-affix="clear">
                                 </div>
                             </div>
                             <div class="layui-col-xs5">
                                 <div style="margin-left: 10px;">
-                                    <img src="https://www.oschina.net/action/user/captcha" onclick="this.src='https://www.oschina.net/action/user/captcha?t='+ new Date().getTime();">
+                                    <canvas id="canvas" width="100" height="43"></canvas>
+                                    <!-- <img src="https://www.oschina.net/action/user/captcha" onclick="this.src='https://www.oschina.net/action/user/captcha?t='+ new Date().getTime();"> -->
                                 </div>
                             </div>
                         </div>
@@ -58,7 +71,7 @@
                         <a href="#forget" style="float: right; margin-top: 7px;">忘记密码？</a>
                     </div>
                     <div class="layui-form-item">
-                        <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="demo-login">登录</button>
+                        <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="demo-login" id="btn-login">登录</button>
                     </div>
                     <div class="layui-form-item demo-login-other">
                         <label>社交账号登录</label>
@@ -73,21 +86,45 @@
         </div>
         <!-- 注册reg -->
         <div class="reg-box">
-            <form class="layui-form">
+            <form class="layui-form" id="reg-form">
                 <div class="demo-reg-container">
                     <div class="layui-form-item">
                         <div class="layui-row">
+                            <div class="layui-form-item">
+                                <div class="layui-input-wrap">
+                                    <div class="layui-input-prefix">
+                                        <i class="layui-icon layui-icon-username"></i>
+                                    </div>
+                                    <input type="text" name="username" value="" lay-verify="required" placeholder="用户名" autocomplete="off" class="layui-input" lay-affix="clear" id="reg-username">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-input-wrap">
+                                    <div class="layui-input-prefix">
+                                        <i class="layui-icon layui-icon-password"></i>
+                                    </div>
+                                    <input type="password" name="password" value="" lay-verify="required" placeholder="密码" autocomplete="off" class="layui-input" id="reg-password" lay-affix="eye">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-input-wrap">
+                                    <div class="layui-input-prefix">
+                                        <i class="layui-icon layui-icon-password"></i>
+                                    </div>
+                                    <input type="password" value="" lay-verify="required|confirmPassword" placeholder="确认密码" autocomplete="off" class="layui-input" lay-affix="eye">
+                                </div>
+                            </div>
                             <div class="layui-col-xs7">
                                 <div class="layui-input-wrap">
                                     <div class="layui-input-prefix">
-                                        <i class="layui-icon layui-icon-cellphone"></i>
+                                        <i class="layui-icon layui-icon-email"></i>
                                     </div>
-                                    <input type="text" name="cellphone" value="" lay-verify="required|phone" placeholder="手机号" lay-reqtext="请填写手机号" autocomplete="off" class="layui-input" id="reg-cellphone">
+                                    <input type="email" name="useremail" value="" lay-verify="required|email" placeholder="邮箱号" lay-reqtext="请填邮箱号" autocomplete="off" class="layui-input" id="reg-email">
                                 </div>
                             </div>
                             <div class="layui-col-xs5">
                                 <div style="margin-left: 11px;">
-                                    <button type="button" class="layui-btn layui-btn-fluid layui-btn-primary" lay-on="reg-get-vercode">获取验证码</button>
+                                    <button type="button" class="layui-btn layui-btn-fluid layui-btn-primary" lay-on="reg-get-vercode" id="obtain-code">获取验证码</button>
                                 </div>
                             </div>
                         </div>
@@ -97,41 +134,20 @@
                             <div class="layui-input-prefix">
                                 <i class="layui-icon layui-icon-vercode"></i>
                             </div>
-                            <input type="text" name="vercode" value="" lay-verify="required" placeholder="验证码" lay-reqtext="请填写验证码" autocomplete="off" class="layui-input">
+                            <input type="text" name="code" value="" lay-verify="required" placeholder="验证码" lay-reqtext="请填写验证码" autocomplete="off" class="layui-input" id="reg-code">
                         </div>
                     </div>
+
+
+
                     <div class="layui-form-item">
-                        <div class="layui-input-wrap">
-                            <div class="layui-input-prefix">
-                                <i class="layui-icon layui-icon-password"></i>
-                            </div>
-                            <input type="password" name="password" value="" lay-verify="required" placeholder="密码" autocomplete="off" class="layui-input" id="reg-password" lay-affix="eye">
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <div class="layui-input-wrap">
-                            <div class="layui-input-prefix">
-                                <i class="layui-icon layui-icon-password"></i>
-                            </div>
-                            <input type="password" name="confirmPassword" value="" lay-verify="required|confirmPassword" placeholder="确认密码" autocomplete="off" class="layui-input" lay-affix="eye">
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <div class="layui-input-wrap">
-                            <div class="layui-input-prefix">
-                                <i class="layui-icon layui-icon-username"></i>
-                            </div>
-                            <input type="text" name="nickname" value="" lay-verify="required" placeholder="昵称" autocomplete="off" class="layui-input" lay-affix="clear">
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <input type="checkbox" name="agreement" lay-verify="required" lay-skin="primary" title="同意">
+                        <input type="checkbox" lay-verify="required" lay-skin="primary" title="同意">
                         <a href="#terms" target="_blank" style="position: relative; top: 6px; left: -15px;">
                             <ins>用户协议</ins>
                         </a>
                     </div>
                     <div class="layui-form-item">
-                        <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="demo-reg">注册</button>
+                        <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="demo-reg" id="reg-submit">注册</button>
                     </div>
                     <div class="layui-form-item demo-reg-other">
                         <label>社交账号注册</label>
@@ -150,80 +166,13 @@
 
     <script src="/XHR Level2新特性/后台练习/lib/layui/layui.js"></script>
     <script src="/XHR Level2新特性/后台练习/lib/jquery.js"></script>
+    <script src="/XHR Level2新特性/后台练习/js/code.js"></script>
+    <script src="/XHR Level2新特性/后台练习/js/jk.js"></script>
+    <script src="/XHR Level2新特性/后台练习/js/script.js"></script>
+
+
 
     <script>
-        //登陆的js代码
-        layui.use(function() {
-            var form = layui.form;
-            var layer = layui.layer;
-            // 提交事件
-            form.on('submit(demo-login)', function(data) {
-                var field = data.field; // 获取表单字段值
-                // 显示填写结果，仅作演示用
-                layer.alert(JSON.stringify(field), {
-                    title: '当前填写的字段值'
-                });
-                // 此处可执行 Ajax 等操作
-                // …
-                return false; // 阻止默认 form 跳转
-            });
-        });
-    </script>
-
-    <script>
-        // 注册的js代码
-        layui.use(function() {
-            var $ = layui.$;
-            var form = layui.form;
-            var layer = layui.layer;
-            var util = layui.util;
-
-            // 自定义验证规则
-            form.verify({
-                // 确认密码
-                confirmPassword: function(value, item) {
-                    var passwordValue = $('#reg-password').val();
-                    if (value !== passwordValue) {
-                        return '两次密码输入不一致';
-                    }
-                }
-            });
-
-            // 提交事件
-            form.on('submit(demo-reg)', function(data) {
-                var field = data.field; // 获取表单字段值
-
-                // 是否勾选同意
-                if (!field.agreement) {
-                    layer.msg('您必须勾选同意用户协议才能注册');
-                    return false;
-                }
-
-                // 显示填写结果，仅作演示用
-                layer.alert(JSON.stringify(field), {
-                    title: '当前填写的字段值'
-                });
-
-                // 此处可执行 Ajax 等操作
-                // …
-
-                return false; // 阻止默认 form 跳转
-            });
-
-            // 普通事件
-            util.on('lay-on', {
-                // 获取验证码
-                'reg-get-vercode': function(othis) {
-                    var isvalid = form.validate('#reg-cellphone'); // 主动触发验证，v2.7.0 新增 
-                    // 验证通过
-                    if (isvalid) {
-                        layer.msg('手机号规则验证通过');
-                        // 此处可继续书写「发送验证码」等后续逻辑
-                        // …
-                    }
-                }
-            });
-        });
     </script>
     <script>
         // 点击登录注册显示和隐藏
