@@ -37,10 +37,20 @@ $(function() {
                     },
                     success: function(res) {
 
-                        console.log(res.msg, res)
+                        console.log(res.msg, res, res.data.username)
                         layer.msg(res.msg);
-                        // 这里写登录成功后的事件
-                        window.location = 'index.html'
+                        // 判断本地存储是否存在数据，如果存在，则不调用存储
+                        // if (!localStorage.getItem('data')) {
+                        //     console.log('创建了本地存储')
+                        //     localStorage.setItem('data', JSON.stringify(res.data)) //用json.stringify字符格式，存到本地存储里
+                        // }
+                        console.log('创建了本地存储')
+                        localStorage.setItem('data', JSON.stringify(res.data)) //用json.stringify字符格式，存到本地存储里
+                            // 这里写登录成功后的事件
+                        setTimeout(function() {
+                            window.location = 'index.html'
+                        }, 500)
+
 
 
                     }
