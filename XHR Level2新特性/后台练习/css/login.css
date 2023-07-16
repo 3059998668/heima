@@ -35,7 +35,8 @@ body {
 }
 
 .demo-login-container,
-.demo-reg-container {
+.demo-reg-container,
+.demo-reset-container {
     width: 320px;
     margin: 21px auto 0;
 }

@@ -8,6 +8,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="/XHR Level2新特性/后台练习/lib/layui/css/layui.css" rel="stylesheet">
+    <link rel="stylesheet" href="/XHR Level2新特性/后台练习/css/index.css">
 </head>
 
 <body>
@@ -45,8 +46,9 @@
         <div class="layui-side layui-bg-black">
             <div class="layui-side-scroll">
                 <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
-                <ul class="layui-nav layui-nav-tree" lay-filter="test">
-                    <li class="layui-nav-item layui-nav-itemed">
+                <ul class="layui-nav layui-nav-tree" lay-filter="test" lay-shrink="all">
+                    <li class="layui-nav-item layui-this"><a href="javascript:;">首页</a></li>
+                    <li class="layui-nav-item">
                         <a class="" href="javascript:;">menu group 1</a>
                         <dl class="layui-nav-child">
                             <dd><a href="javascript:;">menu 1</a></dd>
@@ -56,22 +58,23 @@
                         </dl>
                     </li>
                     <li class="layui-nav-item">
-                        <a href="javascript:;">menu group 2</a>
+                        <a href="javascript:;">个人中心</a>
                         <dl class="layui-nav-child">
-                            <dd><a href="javascript:;">list 1</a></dd>
-                            <dd><a href="javascript:;">list 2</a></dd>
-                            <dd><a href="javascript:;">超链接</a></dd>
+                            <dd><a href="javascript:;">基本资料</a></dd>
+                            <dd><a target="fm" href="/XHR Level2新特性/后台练习/user/user_avatar.html">更换头像</a></dd>
+                            <dd><a target="fm" href="/XHR Level2新特性/后台练习/user/user_resetpassword.html">重置密码</a></dd>
                         </dl>
                     </li>
-                    <li class="layui-nav-item"><a href="javascript:;">click menu item</a></li>
+
                     <li class="layui-nav-item"><a href="javascript:;">the links</a></li>
                 </ul>
             </div>
         </div>
         <div class="layui-body">
             <!-- 内容主体区域 -->
-            <div style="padding: 15px;">
-                <blockquote class="layui-elem-quote layui-text">
+            <div style="padding: 15px; height: 100%;">
+                <iframe src="" frameborder="0" id="fm" name="fm"></iframe>
+                <!-- <blockquote class="layui-elem-quote layui-text">
                     Layui 框体布局内容主体区域
                 </blockquote>
                 <div class="layui-card layui-panel">
@@ -83,12 +86,12 @@
                         <input type="file" id="file">
                     </div>
                 </div>
-                <br><br>
+                <br><br> -->
             </div>
         </div>
         <div class="layui-footer">
             <!-- 底部固定区域 -->
-            底部固定区域
+            CV网络
         </div>
     </div>
 

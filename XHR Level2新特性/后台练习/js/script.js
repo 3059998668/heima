@@ -36,20 +36,20 @@ $(function() {
                         password: field.password
                     },
                     success: function(res) {
+                        console.log(res.msg)
 
-                        console.log(res.msg, res, res.data.username)
-                        layer.msg(res.msg);
-                        // 判断本地存储是否存在数据，如果存在，则不调用存储
-                        // if (!localStorage.getItem('data')) {
-                        //     console.log('创建了本地存储')
-                        //     localStorage.setItem('data', JSON.stringify(res.data)) //用json.stringify字符格式，存到本地存储里
-                        // }
-                        console.log('创建了本地存储')
-                        localStorage.setItem('data', JSON.stringify(res.data)) //用json.stringify字符格式，存到本地存储里
-                            // 这里写登录成功后的事件
-                        setTimeout(function() {
-                            window.location = 'index.html'
-                        }, 500)
+                        if (res.code === 400 && res.msg === '密码错误' || res.msg === '用户不存在') { //判断密码错误
+                            layer.msg(res.msg);
+                        } else {
+                            layer.msg(res.msg);
+                            console.log('创建了本地存储')
+                            localStorage.setItem('data', JSON.stringify(res.data)) //用json.stringify字符格式，存到本地存储里
+                                // 这里写登录成功后的事件
+                            setTimeout(function() {
+                                window.location = 'index.html'
+                            }, 500)
+                        }
+
 
 
 
@@ -67,25 +67,191 @@ $(function() {
 
             }
 
-
-            // $.ajax({
-            //     type: 'GET',
-            //     url: 'v1/Login',
-            //     // dataType: 'jsonp', //使用jsonp解决get跨域
-            //     data: {
-            //         username: field.username,
-            //         password: field.password
-            //     },
-            //     success: function(res) {
-            //         console.log(res)
-            //     }
-            // })
             return false; // 阻止默认 form 跳转
         });
 
 
+
+
     });
+
+    // layui.use(function() {
+    //     // 提交事件
+    //     form.on('submit(demo-reset)', function(data) {
+    //         console.log(data)
+    //         var field = data.field; // 获取表单字段值
+    //         console.log(field)
+
+    //         $.ajax({
+    //             type: 'GET',
+    //             url: 'v1/ResetPassword',
+    //             data: {
+    //                 username: field.username,
+    //                 code: field.code
+    //             },
+    //             success: function(res) {
+    //                 console.log(res.msg)
+    //             }
+
+    //         })
+
+
+    //         return false; // 阻止默认 form 跳转
+    //     });
+
+    // });
     // 登录--------------------------------------------
+
+    // 找回密码------------------------------------------
+    (function() {
+        // layui.use(function() {
+        //     var $ = layui.$;
+        //     var form = layui.form;
+        //     var layer = layui.layer; // 定义全局的layer
+        //     var util = layui.util;
+
+
+
+        //     util.on('lay-on', {
+        //         'reset-get-vercode': function(othis) {
+        //             // var username = $('#reset-username').val()
+        //             var isvalid = form.validate('#reset-username'); // 主动触发验证，v2.7.0 新增 
+        //             console.log(isvalid)
+        //             if (isvalid) {
+        //                 $.ajax({
+        //                     type: 'GET',
+        //                     url: 'v1/GetPasswordCode',
+        //                     data: {
+        //                         username: $('#reset-username').val()
+        //                     },
+        //                     success: function(res) {
+        //                         console.log(res)
+        //                     }
+        //                 })
+        //             }
+
+
+
+        //         }
+        //     })
+
+        // });
+
+        //找回密码
+
+
+        // layui.use(function() {
+        //     var form = layui.form;
+        //     var layer = layui.layer;
+        //     // 1、获取到用户名
+        //     form.on('submit(demo-hq)', function(data) {
+        //         console.log(data)
+        //         var field = data.field; // 获取表单字段值
+        //         console.log(field)
+
+        //         $.ajax({
+        //             type: 'GET',
+        //             url: 'v1/GetPasswordCode',
+        //             data: {
+        //                 username: field.username
+        //             },
+        //             success: function(res) {
+        //                 console.log(res)
+        //             }
+        //         })
+
+
+
+
+        //         return false; // 阻止默认 form 跳转
+        //     });
+
+        // });
+
+        // 点击提交事件
+        // $('#reset-submit').on('click', function(data) {
+        //     data.preventDefault()
+        //     $.ajax({
+        //         type: 'GET',
+        //         url: 'v1/ResetPassword',
+        //         data: {
+        //             username: $('#reset-username').val(),
+        //             code: $('#reset-code').val()
+        //         },
+        //         success: function(res) {
+        //             console.log(res)
+        //         }
+
+        //     })
+        // })
+
+
+        layui.use(function() {
+            var form = layui.form;
+            var layer = layui.layer;
+            // 提交事件
+            form.on('submit(demo-reset-submit)', function(data) {
+                console.log(data)
+                var field = data.field; // 获取表单字段值
+                console.log(field)
+
+                $.ajax({
+                    type: 'GET',
+                    url: 'v1/ResetPassword',
+                    data: {
+                        username: field.username,
+                        code: field.code
+                    },
+                    success: function(res) {
+                        console.log(res.msg)
+                        layer.msg(res.msg)
+                    }
+
+                })
+
+
+                return false; // 阻止默认 form 跳转
+            });
+        });
+
+
+
+
+
+        // 点击获取验证码事件
+        // $('#reset-obtain-code').on('click', function(data) {
+        //         data.preventDefault()
+        //             // 2、发送邮箱请求获取验证码
+        //         $.ajax({
+        //             type: 'GET',
+        //             url: 'v1/GetPasswordCode',
+        //             data: {
+        //                 username: username
+        //             },
+        //             success: function(res) {
+        //                 console.log(res)
+        //             }
+        //         })
+        //     })
+        //     // 点击提交找回密码事件
+        // $('#reset-submit').on('click', function() {
+        //     $.ajax({
+        //         type: 'GET',
+        //         url: 'v1/ResetPassword',
+        //         data: {
+        //             username: username,
+        //             code: $('#reset-code').val()
+        //         },
+        //         success: function(res) {
+        //             console.log(res)
+        //         }
+
+        //     })
+        // })
+
+        console.log(111)
+    }())
+    // 找回密码-------------------------------------------
 
     // 注册
     // 注册的js代码
