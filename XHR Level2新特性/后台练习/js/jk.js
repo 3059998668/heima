@@ -15,10 +15,7 @@ $.ajaxPrefilter(function(options) {
 
             }
 
-            if (res.status === 200 && res.statusText === 'OK') {
-                //说明获取到了token值，已经登录了代表
-                console.log('说明已经登录了')
-            } else if (res.responseJSON.code === 400 && res.responseJSON.msg === 'username不能为空') { //code===400说明没有登录，则强制跳转页面
+            if (res.responseJSON.code === 400 && res.responseJSON.msg === 'username不能为空') { //code===400说明没有登录，则强制跳转页面
                 //1、清除token
                 localStorage.clear()
                     // 2、强制跳转登录页面

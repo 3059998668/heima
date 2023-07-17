@@ -49,7 +49,8 @@ function userIndex() {
         console.log(data)
         $('#nickname').text(data.nickname) //用户名
         $('#usertx').attr("src", data.usertx) //用户头像
-
+            // 用户vip
+        $('#EndVip-time').text(data.viptime)
 
     }
     // 点击退出页面exit

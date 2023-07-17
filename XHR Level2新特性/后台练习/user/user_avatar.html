@@ -23,7 +23,7 @@
         <script src="/XHR Level2新特性/后台练习/js/jk.js"></script>
         <script>
             $(function() {
-
+                var layer = layui.layer;
 
                 file.addEventListener('change', function(e) {
                     var da = JSON.parse(localStorage.getItem('data'))
@@ -40,6 +40,7 @@
                         contentType: false,
                         data: form,
                         succecc: function(res) {
+                            return layer.msg('ccc')
                             console.log(res)
                                 // 从新渲染一下头像
                             setTimeout(function() {
@@ -49,7 +50,8 @@
                         },
                         error: function(res) {
                             console.log(res)
-                        }
+                        },
+                        complete: false
                     })
 
                 })

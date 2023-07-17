@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>会员兑换</title>
+    <link rel="stylesheet" href="/XHR Level2新特性/后台练习/lib/layui/css/layui.css">
+</head>
+
+<body>
+    <div class="layui-col-md12">
+        <div class="layui-card">
+            <div class="layui-card-header">会员卡密兑换</div>
+            <div class="layui-card-body">
+                <form class="layui-form" action="" lay-filter="demo-val-filter">
+                    <!-- 原密码 -->
+                    <div class="layui-form-item layui-col-md4">
+                        <label class="layui-form-label">卡密</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="km" lay-verify="required" autocomplete="off" placeholder="请输入卡密" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button type="submit" class="layui-btn" lay-submit lay-filter="demo-val" id="vipkm-submit">提交</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <script src="/XHR Level2新特性/后台练习/lib/layui/layui.js"></script>
+            <script src="/XHR Level2新特性/后台练习/lib/jquery.js"></script>
+            <script src="/XHR Level2新特性/后台练习/js/jk.js"></script>
+            <script>
+                $(function() {
+                    var layer = layui.layer;
+                    var form = layui.form;
+                    $('#vipkm-submit').on('click', function(event) {
+                        event.preventDefault() //清除表单默认行为
+                        var data = JSON.parse(localStorage.getItem('data')) //获取本地的username 和 token值
+                        var isvalid = form.validate('[name="km"]'); // 主动触发验证，v2.7.0 新增 
+                        console.log(isvalid)
+                        if (isvalid) {
+                            // isvalid等于true的时候执行的事件
+                            $.ajax({
+                                type: 'GET',
+                                url: 'v1/UserKm',
+                                data: {
+                                    username: data.username,
+                                    usertoken: data.usertoken,
+                                    km: $('[name="km"]').val()
+                                },
+                                success: function(res) {
+                                    console.log(res)
+                                    if (res.code === 400 && res.msg === '卡密不存在' || res.msg === '卡密已被使用') {
+                                        layer.msg(res.msg)
+                                    } else {
+                                        // 成功事件
+                                        layer.msg(res.msg)
+                                            // 刷新页面
+                                    }
+                                }
+                            })
+                        }
+                    })
+                })
+            </script>
+</body>
+
+</html>
